@@ -11,6 +11,7 @@ namespace Gedmo\Sortable\Mapping\Event\Adapter;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\DBAL\Types\Type;
 use Gedmo\Mapping\Event\Adapter\ORM as BaseAdapterORM;
 use Gedmo\Sortable\Mapping\Event\SortableAdapter;
 
@@ -22,6 +23,27 @@ use Gedmo\Sortable\Mapping\Event\SortableAdapter;
  */
 final class ORM extends BaseAdapterORM implements SortableAdapter
 {
+    public function getGroupsHash(array $groups, array $config)
+    {
+        $data = $config['useObjectClass'];
+        $metadata = $this->getObjectManager()->getClassMetadata($data);
+        $platform = $this->getObjectManager()->getConnection()->getDatabasePlatform();
+
+        foreach ($groups as $group => $value) {
+            $type = $metadata->getTypeOfField($group);
+
+            if ($type !== null && Type::hasType($type)) {
+                $value = Type::getType($type)->convertToDatabaseValue($value, $platform);
+            } elseif (is_object($value)) {
+                $value = spl_object_hash($value);
+            }
+
+            $data .= "[{$group}][{$value}]";
+        }
+
+        return md5($data);
+    }
+
     /**
      * @param ClassMetadata $meta
      * @param array         $groups

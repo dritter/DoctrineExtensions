@@ -133,7 +133,7 @@ class SortableListener extends MappedEventSubscriber
             $groups = $this->getGroups($meta, $config, $object);
 
             // Get hash
-            $hash = $this->getHash($groups, $config);
+            $hash = $ea->getGroupsHash($groups, $config);
 
             // Get max position
             if (!isset($this->maxPositions[$hash])) {
@@ -295,7 +295,7 @@ class SortableListener extends MappedEventSubscriber
         $groups = $this->getGroups($meta, $config, $object);
 
         // Get hash
-        $hash = $this->getHash($groups, $config);
+        $hash = $ea->getGroupsHash($groups, $config);
 
         // Get max position
         if (!isset($this->maxPositions[$hash])) {
@@ -372,7 +372,7 @@ class SortableListener extends MappedEventSubscriber
         $newPosition = 0;
 
         if ($changed) {
-            $oldHash = $this->getHash($oldGroups, $config);
+            $oldHash = $ea->getGroupsHash($oldGroups, $config);
             $this->maxPositions[$oldHash] = $this->getMaxPosition($ea, $meta, $config, $object, $oldGroups);
             if (array_key_exists($config['position'], $changeSet)) {
                 $oldPosition = $changeSet[$config['position']][0];
@@ -384,7 +384,7 @@ class SortableListener extends MappedEventSubscriber
         }
 
         // Get hash
-        $hash = $this->getHash($groups, $config);
+        $hash = $ea->getGroupsHash($groups, $config);
 
         // Get max position
         if (!isset($this->maxPositions[$hash])) {
@@ -498,7 +498,7 @@ class SortableListener extends MappedEventSubscriber
         $groups = $this->getGroups($meta, $config, $object);
 
         // Get hash
-        $hash = $this->getHash($groups, $config);
+        $hash = $ea->getGroupsHash($groups, $config);
 
         // Get max position
         if (!isset($this->maxPositions[$hash])) {
@@ -573,7 +573,7 @@ class SortableListener extends MappedEventSubscriber
         }
 
         // Get hash
-        $hash = $this->getHash($groups, $config);
+        $hash = $ea->getGroupsHash($groups, $config);
 
         // Check for cached max position
         if (isset($this->maxPositions[$hash])) {
